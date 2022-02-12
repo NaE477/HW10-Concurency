@@ -20,7 +20,9 @@ public class Main {
             if (opt.equals("1")) {
                 intSleepControl();
             } else if (opt.equals("2")) {
-                checkingAccountControl();
+                incorrectCheckingAccountControl();
+            } else if (opt.equals("3")) {
+                correctCheckingAccountControl();
             } else if (opt.equals("0")) {
                 break;
             } else {
@@ -46,8 +48,8 @@ public class Main {
     }
 
     //Assignment #2
-    public static void checkingAccountControl(){
-        final CheckingAccount ca = new CheckingAccount(100);
+    public static void incorrectCheckingAccountControl() {
+        final CheckingAccount ca = new CheckingAccount(100); //Withdrawal is from the same account with both husband and wife
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -63,5 +65,33 @@ public class Main {
         thdWife.setName("Wife");
         thdHusband.start();
         thdWife.start();
+    }
+
+    //Assignment #3
+    public static void correctCheckingAccountControl() {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    final CheckingAccount ca = new CheckingAccount(100); //Each thread was feeding from same account,fixed
+                    String name = Thread.currentThread().getName();
+                    for (int i = 0; i < 10; i++) {
+                            System.out.println(name + " withdraws $10: " +
+                                    ca.withdraw(10));
+                    }
+                }
+            };
+            Thread thdHusband = new Thread(r);
+            thdHusband.setName("Husband");
+            Thread thdWife = new Thread(r);
+            thdWife.setName("Wife");
+            thdHusband.start();
+            thdWife.start();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
     }
 }
