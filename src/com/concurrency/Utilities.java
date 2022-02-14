@@ -62,6 +62,16 @@ public class Utilities {
         } else return  250;
     }
 
+    public static Integer intReceiver(){
+        while (true) {
+            try {
+                return Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                Utilities.printRed("           Only e or numbers are allowed here.", 250);
+            }
+        }
+    }
+
     public static void listIntReceiver(ArrayList<Integer> inputList){
         int count = 1;
         while (true) {

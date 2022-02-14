@@ -1,32 +1,47 @@
 package com.concurrency;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+
+        label:
         while (true) {
             ArrayList<String> menu = new ArrayList<>();
             menu.add("Welcome to HW10-Concurrency");
             menu.add("Assignments: ");
             menu.add("1-Integer Sleep");
             menu.add("2-Checking Account");
+            menu.add("3-Fixed Checking Account");
+            menu.add("4-File Size Calculator");
 
             menu.add("0-Exit");
             Utilities.menuViewer(menu);
             String opt = sc.nextLine();
-            if (opt.equals("1")) {
-                intSleepControl();
-            } else if (opt.equals("2")) {
-                incorrectCheckingAccountControl();
-            } else if (opt.equals("3")) {
-                correctCheckingAccountControl();
-            } else if (opt.equals("0")) {
-                break;
-            } else {
-                System.out.println("Wrong Option.");
+            switch (opt) {
+                case "1":
+                    intSleepControl();
+                    break;
+                case "2":
+                    incorrectCheckingAccountControl();
+                    break;
+                case "3":
+                    correctCheckingAccountControl();
+                    break;
+                case "4":
+                    sizeCalculator();
+                    break;
+                case "0":
+                    break label;
+                default:
+                    System.out.println("Wrong Option.");
+                    break;
             }
         }
     }
@@ -50,14 +65,11 @@ public class Main {
     //Assignment #2
     public static void incorrectCheckingAccountControl() {
         final CheckingAccount ca = new CheckingAccount(100); //Withdrawal is from the same account with both husband and wife
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                String name = Thread.currentThread().getName();
-                for (int i = 0; i < 10; i++)
-                    System.out.println(name + " withdraws $10: " +
-                            ca.withdraw(10));
-            }
+        Runnable r = () -> {
+            String name = Thread.currentThread().getName();
+            for (int i = 0; i < 10; i++)
+                System.out.println(name + " withdraws $10: " +
+                        ca.withdraw(10));
         };
         Thread thdHusband = new Thread(r);
         thdHusband.setName("Husband");
@@ -69,29 +81,38 @@ public class Main {
 
     //Assignment #3
     public static void correctCheckingAccountControl() {
-            Runnable r = new Runnable() {
-                @Override
-                public void run() {
-                    final CheckingAccount ca = new CheckingAccount(100); //Each thread was feeding from same account,fixed
-                    String name = Thread.currentThread().getName();
-                    for (int i = 0; i < 10; i++) {
-                            System.out.println(name + " withdraws $10: " +
-                                    ca.withdraw(10));
-                    }
-                }
-            };
-            Thread thdHusband = new Thread(r);
-            thdHusband.setName("Husband");
-            Thread thdWife = new Thread(r);
-            thdWife.setName("Wife");
-            thdHusband.start();
-            thdWife.start();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        Runnable r = () -> {
+            final CheckingAccount ca = new CheckingAccount(100); //Each thread was feeding from same account,fixed
+            String name = Thread.currentThread().getName();
+            for (int i = 0; i < 10; i++) {
+                System.out.println(name + " withdraws $10: " +
+                        ca.withdraw(10));
             }
+        };
+        Thread thdHusband = new Thread(r);
+        thdHusband.setName("Husband");
+        Thread thdWife = new Thread(r);
+        thdWife.setName("Wife");
+        thdHusband.start();
+        thdWife.start();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //Assignment #4
+    public static void sizeCalculator(){
+        String path = "G:\\Series\\پهلوانان\\S3";
+        Integer threads = 20;
+        SizeCalculator sizeCalculator = new SizeCalculator(path,threads);
+        try {
+            System.out.println(sizeCalculator.calcFilesSize());
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
