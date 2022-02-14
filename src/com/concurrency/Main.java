@@ -106,13 +106,16 @@ public class Main {
 
     //Assignment #4
     public static void sizeCalculator(){
-        String path = "G:\\Series\\پهلوانان\\S3";
-        Integer threads = 20;
-        SizeCalculator sizeCalculator = new SizeCalculator(path,threads);
+        File file = Utilities.filePathReceiver();
+        System.out.print("           Number of threads: ");
+        Integer threads = Utilities.intReceiver();
+        SizeCalculator sizeCalculator = new SizeCalculator(file,threads);
         try {
-            System.out.println(sizeCalculator.calcFilesSize());
+            Utilities.printGreen("           " + sizeCalculator.calcFilesSize(),400);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+
 }

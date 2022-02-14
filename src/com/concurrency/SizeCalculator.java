@@ -15,8 +15,8 @@ public class SizeCalculator {
      */
     Integer threadCount;
 
-    public SizeCalculator(String path,Integer threadCount){
-        this.file = new File(path);
+    public SizeCalculator(File file,Integer threadCount){
+        this.file = file;
         this.threadCount = threadCount;
     }
 
