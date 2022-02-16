@@ -7,15 +7,17 @@ public class CheckingAccount {
     }
 
     public boolean withdraw(int amount) {
-        if (amount <= balance) {
-            try {
-                Thread.sleep((int) (Math.random() * 200));
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
+        //synchronized (this) {  possible problem
+            if (amount <= balance) {
+                try {
+                    Thread.sleep((int) (Math.random() * 200));
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+                balance -= amount;
+                return true;
             }
-            balance -= amount;
-            return true;
-        }
-        return false;
+            return false;
+        //}
     }
 }

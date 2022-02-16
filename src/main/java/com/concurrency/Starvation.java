@@ -1,6 +1,7 @@
 package com.concurrency;
 
 public class Starvation {
+
     public static final Object obj1 = new Object();
     public static final Object obj2 = new Object();
 
