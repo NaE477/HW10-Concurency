@@ -69,7 +69,9 @@ public class Utilities {
     public static Integer intReceiver() {
         while (true) {
             try {
-                return Integer.parseInt(sc.nextLine());
+                int output = Integer.parseInt(sc.nextLine());
+                if(output > 0) return output;
+                else System.out.println("           Enter a number bigger than 0");
             } catch (NumberFormatException e) {
                 Utilities.printRed("           Only numbers are allowed here.", 250);
                 System.out.print("           ");

@@ -4,12 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-
 
         label:
         while (true) {
@@ -20,6 +21,7 @@ public class Main {
             menu.add("2-Checking Account");
             menu.add("3-Fixed Checking Account");
             menu.add("4-File Size Calculator");
+            menu.add("5-Deadlock");
 
             menu.add("0-Exit");
             Utilities.menuViewer(menu);
@@ -37,6 +39,9 @@ public class Main {
                 case "4":
                     sizeCalculator();
                     break;
+                case "5":
+
+                    break;
                 case "0":
                     break label;
                 default:
@@ -50,6 +55,7 @@ public class Main {
     public static void intSleepControl() {
         System.out.println();
         IntSleep intSleep = new IntSleep();
+
         long now = System.currentTimeMillis();
         System.out.println("           Start at: " + now);
         intSleep.start();
@@ -109,13 +115,19 @@ public class Main {
         File file = Utilities.filePathReceiver();
         System.out.print("           Number of threads: ");
         Integer threads = Utilities.intReceiver();
-        SizeCalculator sizeCalculator = new SizeCalculator(file,threads);
+        long then = System.currentTimeMillis();
         try {
-            Utilities.printGreen("           " + sizeCalculator.calcFilesSize(),400);
+            long size =  SizeCalculator.calcFilesSize(file,threads);
+            long now = System.currentTimeMillis();
+
+            Utilities.printGreen("           " + size + " bytes",400);
+            Utilities.printGreen("           " + size/1024 + " kilobytes",400);
+            Utilities.printGreen("           " + size/1024/1024 + " megabytes",400);
+            Utilities.printGreen("           " + size/1024/1024/1024 + " gigabytes",400);
+
+            System.out.println("           Execution time: " + (now - then) + "ms");
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-
-
 }

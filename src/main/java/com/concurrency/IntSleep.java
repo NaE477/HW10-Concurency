@@ -10,7 +10,7 @@ public class IntSleep extends Thread {
         while (!Thread.currentThread().isInterrupted()) {
             synchronized (this) {
                 if(!stopped) {
-                    System.out.println("           " + count++ + "Hello");
+                    System.out.println("           " + count++ + ":Hello");
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
